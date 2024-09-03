@@ -10,3 +10,8 @@ export interface IUser extends User {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface IPlan {
+    num_of_questions: number;
+    question_ids: string[];
+}
