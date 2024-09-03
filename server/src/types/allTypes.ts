@@ -5,3 +5,8 @@ export interface UserTypes {
     password: string;
     username: string;
 }
+
+export interface loginTypes {
+    email: string;
+    password: string;
+}
