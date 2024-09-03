@@ -1,6 +1,6 @@
-import { User } from "../allTypes";
+import { UserTypes } from "../allTypes";
 
-export interface IUser extends User {
+export interface IUser extends UserTypes {
     current_level: number;
     points: number;
     completed_questions: object[];

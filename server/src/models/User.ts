@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema<IUserModel>({
   phone_number: {
     type: String,
     required: true,
+    unique: true,
   },
   username: {
     type: String,
