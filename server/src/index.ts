@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { config } from "./config";
 import mongoose from "mongoose";
+import { registerRoutes } from "./routes";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -11,6 +13,7 @@ const PORT = config.server.port;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 (async function startUp() {
   try {
@@ -21,6 +24,8 @@ app.use(express.json());
     });
 
     console.log("connected to database");
+
+    registerRoutes(app)
 
     app.get("/test", (req: Request, res: Response) => {
       res.status(200).json({ messge: "server is running" });
