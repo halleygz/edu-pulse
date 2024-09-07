@@ -10,7 +10,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Personalized Learning",
+  title: "Edu-pulse",
   description: "Getting Assesed and Learning",
 };
 
