@@ -14,9 +14,4 @@ export const navLinks = [
         url: "#testimonials",
         label: 'Testimonials'
     },
-    {
-            id: 5,
-            url: "",
-            label: "Daily learning"
-    },
 ];
