@@ -14,4 +14,7 @@ export const navLinks = [
         url: "#testimonials",
         label: 'Testimonials'
     },
+
+
 ];
+
