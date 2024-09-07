@@ -82,6 +82,10 @@ const evaluateAssessment = async (req: AuthRequested, res: Response) => {
   const user = req.user;
   const { user_responses } = req.body as { user_responses: UserResponsePlan[] };
 
+  if (!user) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+
   const selectedPlan = user_responses.find((user_response: UserResponsePlan) => user_response._id === id);
   
   if (!selectedPlan) {
@@ -92,42 +96,40 @@ const evaluateAssessment = async (req: AuthRequested, res: Response) => {
 
   try {
     const answerEvalResult = analyzeAnswer(answer);
-    
-    if (!user) {
-      return res.status(401).json({ message: "User not authenticated" });
-    }
 
-    const filteredPlan = user.plans.find((plan) => plan._id.toString() === id);
-    
-    if (!filteredPlan) {
+    // Find the index of the plan to update
+    const planIndex = user.plans.findIndex((plan) => plan._id.toString() === id);
+
+    if (planIndex === -1) {
       return res.status(404).json({ message: "Plan not found in user's plans" });
     }
 
-    const updatedPlan = {
-      ...filteredPlan,
-      questions: answerEvalResult.answerEval,
-      completedAt: new Date(),
+    // Prepare the update operation
+    const updateOperation = {
+      $set: {
+        [`plans.${planIndex}.questions`]: answerEvalResult.answerEval,
+        [`plans.${planIndex}.completedAt`]: new Date(),
+        current_level: (user.current_level || 0) + answerEvalResult.user_level,
+        avg_response_time: (user.avg_response_time || 0) + answerEvalResult.avg_response_time,
+        avg_intensity: (user.avg_intensity || 0) + answerEvalResult.avg_intensity,
+        points: (user.points || 0) + answerEvalResult.point,
+      },
+      $addToSet: {
+        completed_questions: { $each: answerEvalResult.answered_Questions }
+      }
     };
 
-    const updatedPlans = user.plans.map((plan) => 
-      plan._id.toString() === id ? updatedPlan : plan
-    );
-
+    // Perform the update
     const updateUser = await User.updateOne(
       { _id: user._id },
-      {
-        $set: {
-          plans: updatedPlans,
-          current_level: (user.current_level || 0) + answerEvalResult.user_level,
-          avg_response_time: (user.avg_response_time || 0) + answerEvalResult.avg_response_time,
-          avg_intensity: (user.avg_intensity || 0) + answerEvalResult.avg_intensity,
-          points: (user.points || 0) + answerEvalResult.point,
-          completed_questions: [...(user.completed_questions || []), ...answerEvalResult.answered_Questions],
-        },
-      }
+      updateOperation
     );
 
-    res.status(200).json({ updateUser });
+    if (updateUser.modifiedCount === 0) {
+      return res.status(500).json({ message: "Failed to update user data" });
+    }
+
+    res.status(200).json({ message: "Assessment evaluated and user data updated successfully", answerEvalResult });
   } catch (error: unknown) {
     res.status(500).json({ message: "Internal Server Error" });
     console.log(error);
