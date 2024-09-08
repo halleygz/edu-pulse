@@ -32,6 +32,7 @@ const signUp = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   const { email, password }: loginTypes = req.body;
+  console.log(email, password)
 
   try {
     const user = await User.findOne({ email });
@@ -40,22 +41,22 @@ const login = async (req: Request, res: Response) => {
       if (passCheck) {
         // Ensure genTokenSetCookie does not send a response
         genTokenSetCookie(res, user);
-        if (res.headersSent) {
-          res.status(200).json({
-            message: "login successful",
+        if (!res.headersSent) {
+        res.status(200).json({
+          message: "login successful",
             userId: user._id,
             full_name: user.full_name,
             email: user.email,
             username: user.username,
           });
-        }
-      } else {
-        if (res.headersSent) {
+      } 
+    } else {
+        if (!res.headersSent) {
           res.status(400).json({ error: "invalid credentials" });
         }
       }
     } else {
-      if (res.headersSent) {
+      if (!res.headersSent) {
         res.status(400).json({ error: "invalid credentials" });
       }
     }
