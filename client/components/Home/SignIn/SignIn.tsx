@@ -1,3 +1,4 @@
+import useLogin from '@/hooks/useLogin';
 import React, { useState } from 'react';
 import { FaFacebook, FaApple, FaGoogle, FaTimes } from 'react-icons/fa';
 
@@ -13,20 +14,11 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
-  const handleSignIn = async () => {
-    try {
-      const response = await fetch('/api/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  const [{isLoading, error}, login] = useLogin()
 
-      if (!response.ok) throw new Error('Sign-in failed');
-      // Handle successful sign-in
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
+  const handleLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await login(email, password);
   };
 
   return (
@@ -42,7 +34,8 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
         <p className="text-center mb-4 text-xs sm:text-sm">
           Achieve academic excellence with personalized learning—login to start your journey!
         </p>
-        
+        <form onSubmit={handleLogin}>
+
         <input 
           type="email" 
           placeholder="Email" 
@@ -60,11 +53,11 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
         />
         
         <button 
-          onClick={handleSignIn}
           className="w-full py-1.5 mb-3 text-white bg-custom-green rounded-lg hover:bg-green-600 text-xs sm:text-sm"
         >
-          Login
+          {isLoading ? "loading don't press" : "Login"}
         </button>
+        </form>
         
         <button className="flex items-center justify-center w-full py-1.5 mb-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 text-xs sm:text-sm">
           <FaFacebook className="mr-1.5" />
