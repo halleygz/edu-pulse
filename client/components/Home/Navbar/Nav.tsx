@@ -56,4 +56,5 @@ const Nav = ({ openNav, openSignIn }: Props) => {
   );
 };
 
+
 export default Nav;
