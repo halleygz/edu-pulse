@@ -12,6 +12,7 @@ import Topics from './Topics/Topics';
 import Quiz from './Quiz/Quiz';
 import ReviewResult from './Quiz/ReviewResult';
 import DailyStudy from './daily-study/daily-study';
+import ProfilePage from './EditProfile/ProfilePage';
 
 
 const Home = () => {
@@ -37,6 +38,7 @@ const Home = () => {
       <Quiz onReview={handleReviewClick} />
       {showReview && <ReviewResult onClose={handleCloseReview} />}
       <DailyStudy/>
+      <ProfilePage/>
       <Footer />
     </div>
   );
