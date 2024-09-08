@@ -26,6 +26,7 @@ const MobileNav = ({ closeNav, showNav }: Props) => {
                     {/* Logo */}
                     <h2 className='text-2xl font-extrabold text-center mt-12 mb-8'>EduPlus</h2>
                     {/* SearchBar and Profile */}
+
                     <div className='flex flex-col items-center space-y-4'>
                         <SearchBar />
                         <Profile />
