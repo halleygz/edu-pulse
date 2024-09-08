@@ -11,7 +11,7 @@ import PremiumCourses from './Premium/Premium';
 import Topics from './Topics/Topics';
 import Quiz from './Quiz/Quiz';
 import ReviewResult from './Quiz/ReviewResult';
-/* import DailyStudy from './daily-study/daily-study'; */
+import DailyStudy from './daily-study/daily-study';
 
 
 const Home = () => {
@@ -36,7 +36,7 @@ const Home = () => {
       <Topics />
       <Quiz onReview={handleReviewClick} />
       {showReview && <ReviewResult onClose={handleCloseReview} />}
-      {/* <DailyStudy/> */}
+      <DailyStudy/>
       <Footer />
     </div>
   );
