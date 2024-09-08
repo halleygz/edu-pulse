@@ -22,11 +22,11 @@ const signUp = async (req: Request, res: Response) => {
       genTokenSetCookie(res, user);
       res.status(201).json({ user });
     } else {
-      res.status(400).json({ message: "couldn't create user:" });
+      res.status(400).json({ error: "couldn't create user:" });
     }
-  } catch (error: any) {
-    res.status(500).json({ message: "Internal Server Error" });
-    console.log(error);
+  } catch (err: any) {
+    res.status(500).json({ error: "Internal Server Error" });
+    console.log(err);
   }
 };
 
@@ -51,25 +51,30 @@ const login = async (req: Request, res: Response) => {
         }
       } else {
         if (!res.headersSent) {
-          res.status(400).json({ message: "invalid credentials" });
+          res.status(400).json({ error: "invalid credentials" });
         }
       }
     } else {
       if (!res.headersSent) {
-        res.status(400).json({ message: "invalid credentials" });
+        res.status(400).json({ error: "invalid credentials" });
       }
     }
-  } catch (error: any) {
+  } catch (err: any) {
     if (!res.headersSent) {
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error" });
     }
-    console.log("error occurred during login", error);
+    console.log("error occurred during login", err);
   }
 };
 
 const logout = async (req: Request, res: Response) => {
   try {
-    res.cookie("token", "", { maxAge: 0 });
+    res.cookie("token", "", {
+      maxAge: 0,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     res.status(200).json({ message: "logged out" });
   } catch (error: any) {
     res.status(500).json({ message: "Internal Server Error" });
