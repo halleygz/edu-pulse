@@ -12,7 +12,7 @@ const app: Express = express();
 const PORT = config.server.port;
 
 app.use(cors({
-  origin: "https://edu-pulse.onrender.com",
+  origin: "https://3000-idx-pla-directed-1725603589203.cluster-4ezwrnmkojawstf2k7vqy36oe6.cloudworkstations.dev/",
   credentials: true,
 }));
 app.use(express.json());
