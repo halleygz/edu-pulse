@@ -11,6 +11,8 @@ import PremiumCourses from './Premium/Premium';
 import Topics from './Topics/Topics';
 import Quiz from './Quiz/Quiz';
 import ReviewResult from './Quiz/ReviewResult';
+/* import DailyStudy from './daily-study/daily-study'; */
+
 
 const Home = () => {
   const [showReview, setShowReview] = useState(false);
@@ -34,6 +36,7 @@ const Home = () => {
       <Topics />
       <Quiz onReview={handleReviewClick} />
       {showReview && <ReviewResult onClose={handleCloseReview} />}
+      {/* <DailyStudy/> */}
       <Footer />
     </div>
   );
