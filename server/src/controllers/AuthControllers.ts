@@ -40,7 +40,7 @@ const login = async (req: Request, res: Response) => {
       if (passCheck) {
         // Ensure genTokenSetCookie does not send a response
         genTokenSetCookie(res, user);
-        if (!res.headersSent) {
+        if (res.headersSent) {
           res.status(200).json({
             message: "login successful",
             userId: user._id,
@@ -50,17 +50,17 @@ const login = async (req: Request, res: Response) => {
           });
         }
       } else {
-        if (!res.headersSent) {
+        if (res.headersSent) {
           res.status(400).json({ error: "invalid credentials" });
         }
       }
     } else {
-      if (!res.headersSent) {
+      if (res.headersSent) {
         res.status(400).json({ error: "invalid credentials" });
       }
     }
   } catch (err: any) {
-    if (!res.headersSent) {
+    if (res.headersSent) {
       res.status(500).json({ error: "Internal Server Error" });
     }
     console.log("error occurred during login", err);
