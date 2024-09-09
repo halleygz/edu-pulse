@@ -14,7 +14,8 @@ const PORT = config.server.port;
 app.use(cors({
   origin: "https://3000-idx-pla-directed-1725603589203.cluster-4ezwrnmkojawstf2k7vqy36oe6.cloudworkstations.dev",
   credentials: true,
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
 app.use(cookieParser());
