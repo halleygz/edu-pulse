@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-
+import useTakeAssessment from '@/hooks/useTakeAssessment'
 const subjectData = {
   subject: "Biology",
   chapters: [
@@ -62,33 +62,35 @@ const subjectData = {
         }
       ]
     },
-    {
-      chapter: "Genetics",
-      topics: []
-    },
-    {
-      chapter: "Evolution",
-      topics: []
-    },
-    {
-      chapter: "Ecology",
-      topics: []
-    },
-    {
-      chapter: "Physiology",
-      topics: []
-    },
-    {
-      chapter: "Biochemistry",
-      topics: []
-    }
+    // {
+    //   chapter: "Genetics",
+    //   topics: []
+    // },
+    // {
+    //   chapter: "Evolution",
+    //   topics: []
+    // },
+    // {
+    //   chapter: "Ecology",
+    //   topics: []
+    // },
+    // {
+    //   chapter: "Physiology",
+    //   topics: []
+    // },
+    // {
+    //   chapter: "Biochemistry",
+    //   topics: []
+    // }
   ]
 };
 
 const Topics: React.FC = () => {
   const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [err, setError] = useState<string | null>(null);
+
+  const [{isLoading}, takeAssesment] = useTakeAssessment()
 
   const handleSelectChapter = (index: number) => {
     setSelectedChapter(index);
@@ -110,7 +112,16 @@ const Topics: React.FC = () => {
       setError(null);
     }
   };
-
+  const handleTakeAssessment = async () => {
+    // e.preventDefault()
+    if (selectedChapter === null) {
+      setError('Please select a chapter before taking the assessment.');
+    } else if (selectedTopic === null) {
+      setError('Please select a topic before taking the assessment.');
+    } else {
+      await takeAssesment(selectedTopic)
+    }
+  }
   const handleCloseModal = () => setError(null);
 
   return (
@@ -179,14 +190,7 @@ const Topics: React.FC = () => {
         </div>
       </div>
 
-      {/* Take Assessment Button */}
-      <div className="mt-8 text-center">
-        <button
-          className="bg-custom-green text-white px-6 py-3 rounded-md hover:bg-green-600"
-        >
-          Take Assessment
-        </button>
-      </div>
+      
 
       {/* Selected Chapter Details */}
       {selectedChapter !== null && (
@@ -224,12 +228,20 @@ const Topics: React.FC = () => {
           </div>
         </div>
       )}
-
+{/* Take Assessment Button */}
+<div className="mt-8 text-center">
+        <button
+          onClick={handleTakeAssessment}
+          className="bg-custom-green text-white px-6 py-3 rounded-md hover:bg-green-600"
+        >
+          Take Assessment
+        </button>
+      </div>
       {/* Error Modal */}
-      {error && (
+      {err && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 z-50">
           <div className="bg-white p-6 rounded-md shadow-lg">
-            <p className="text-center text-lg text-red-600">{error}</p>
+            <p className="text-center text-lg text-red-600">{err}</p>
             <button
               onClick={handleCloseModal}
               className="mt-4 bg-custom-green text-white px-4 py-2 rounded-md hover:bg-green-600"

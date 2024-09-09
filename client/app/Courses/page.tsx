@@ -6,15 +6,11 @@ import useAuthRedirect from '@/hooks/useAuthRedirect'
 import React from 'react'
 
 const Home = () => {
-  const isAuthenticated = useAuthRedirect()
-  if(!isAuthenticated) {
-    return <>Please Login</>
-  }
   return (
     <div>
         <KnowledgeTest/>
         <Courses/>
-        <PremiumCourses/>
+        {/* <PremiumCourses/> */}
     </div>
   )
 }
