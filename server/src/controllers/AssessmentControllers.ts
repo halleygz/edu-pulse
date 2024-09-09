@@ -69,8 +69,9 @@ const createAssessment = async (req: AuthRequested, res: Response) => {
     }
     
     const updateUser = await User.updateOne({ _id: user._id }, { $push: { plans: newPlan } });
+    const allUserPlans = await User.findById(user._id).populate("plans");
     console.log("new plan created!");
-    res.status(200).json({updateUser, newPlan});
+    res.status(200).json({updateUser, allUserPlans});
   } catch (error: unknown) {
     res.status(500).json({ message: "Internal Server Error" });
     console.log(error);
