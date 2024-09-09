@@ -31,14 +31,14 @@ const Home = () => {
       <Hero />
       <About />
       <Review />
-      <KnowledgeTest />
+      {/* <KnowledgeTest />
       <Courses />
       <PremiumCourses />
       <Topics />
       <Quiz onReview={handleReviewClick} />
       {showReview && <ReviewResult onClose={handleCloseReview} />}
       <DailyStudy/>
-      <ProfilePage/>
+      <ProfilePage/> */}
       <Footer />
     </div>
   );
