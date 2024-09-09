@@ -1,3 +1,4 @@
+import useSignUp from '@/hooks/useSignUp';
 import React, { useState } from 'react';
 import { FaFacebook, FaApple, FaGoogle, FaTimes } from 'react-icons/fa';
 
@@ -7,28 +8,24 @@ interface SignUpProps {
 }
 
 const SignUp: React.FC<SignUpProps> = ({ onClose, onSwitch }) => {
-  const [fullName, setFullName] = useState('');
+  const [full_name, setFullName] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => setFullName(e.target.value);
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value);
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value);
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
-  const handleSignUp = async () => {
-    try {
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, email, password }),
-      });
+  const [{isLoading, error}, signup] = useSignUp()
 
-      if (!response.ok) throw new Error('Sign-up failed');
-      // Handle successful sign-up
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
+  const handleSignUp = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onClose()
+    await signup(full_name, phone_number, username, email, password);
   };
 
   return (
@@ -45,7 +42,7 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, onSwitch }) => {
           Join our community for personalized, engaging learning. Create your account now!
         </p>
         
-        <button className="flex items-center justify-center w-full py-1.5 mb-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 text-xs sm:text-sm">
+        {/* <button className="flex items-center justify-center w-full py-1.5 mb-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 text-xs sm:text-sm">
           <FaFacebook className="mr-1.5" />
           Continue with Facebook
         </button>
@@ -58,13 +55,27 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, onSwitch }) => {
         <button className="flex items-center justify-center w-full py-1.5 mb-3 text-black bg-white border rounded-lg hover:bg-gray-100 text-xs sm:text-sm">
           <FaGoogle className="mr-1.5" />
           Continue with Google
-        </button>
-
+        </button> */}
+      <form onSubmit={handleSignUp}>
         <input 
           type="text" 
           placeholder="Full Name" 
-          value={fullName} 
+          value={full_name} 
           onChange={handleFullNameChange} 
+          className="w-full px-3 py-2 mb-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green text-xs sm:text-sm"
+        />
+        <input 
+          type="text" 
+          placeholder="Phone Number" 
+          value={phone_number} 
+          onChange={handlePhoneChange} 
+          className="w-full px-3 py-2 mb-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green text-xs sm:text-sm"
+        />
+        <input 
+          type="text" 
+          placeholder="username" 
+          value={username} 
+          onChange={handleUsernameChange} 
           className="w-full px-3 py-2 mb-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green text-xs sm:text-sm"
         />
         
@@ -85,12 +96,12 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, onSwitch }) => {
         />
         
         <button 
-          onClick={handleSignUp}
           className="w-full py-1.5 mb-3 text-white bg-custom-green rounded-lg hover:bg-green-600 text-xs sm:text-sm"
         >
-          Create Account
+          {isLoading? "don't press" : "Create Account"}
         </button>
         
+      </form>
         <p className="text-center text-xs sm:text-sm">
           Already have an account? <a href="#" onClick={onSwitch} className="text-custom-green hover:underline">Sign In</a>
         </p>
