@@ -28,8 +28,13 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} antialiased`}
         >
         <AuthProvider>
+          <div className="mb-2">
         <ResponsiveNav/>
+          </div>
+          <div>
+
         {children}
+          </div>
     </AuthProvider>
       </body>
     </html>

@@ -5,15 +5,15 @@ import {useRouter} from 'next/navigation'
 import {useAuth} from '../context/AuthContext'
 
 export default function useAuthRedirect() {
-    const {isAuthenticated} = useAuth()
+    const {authUser} = useAuth()
     const router = useRouter()
 
     useEffect(() => {
-        console.log(isAuthenticated)
-        if (!isAuthenticated) {
+        console.log(authUser)
+        if (!authUser) {
             router.push('/')
         }
-    }, [isAuthenticated, router])
+    }, [authUser, router])
 
-    return isAuthenticated
+    return authUser
 }
