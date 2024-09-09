@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation"; // Import useRouter
@@ -34,7 +33,8 @@ const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [recommendation, setRecommendation] = useState<any>(null);
   const [showFullContent, setShowFullContent] = useState(false); // State to control content view
-
+  
+  "use client";
   const index = Number(searchParams.get("index"))
   console.log(typeof index)
   useEffect(() => {
