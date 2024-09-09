@@ -16,7 +16,7 @@ const useLogout = ():[() => Promise<void>] => {
         localStorage.removeItem('app-user');
         setIsAuthenticated(false);
         toast.success('Successfully logged out!');
-        router.push('/Login');
+        router.push('/');
     }
 
     return [logout];
