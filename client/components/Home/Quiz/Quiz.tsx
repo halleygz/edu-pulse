@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Import icons
 import ShowResult from './ShowResult';
 
@@ -27,19 +27,36 @@ const Quiz: React.FC<{ onReview: () => void }> = ({ onReview }) => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [userAnswers, setUserAnswers] = useState<{ questionId: string; selectedOption: string }[]>([]);
   const router = useRouter();
-
+  const searchParams = useSearchParams()
+  const index = Number(searchParams.get("index"))
+  console.log(typeof index)
   useEffect(() => {
-    const fetchQuestions = async () => {
-      const response = await fetch('/questions.json');
-      if (!response.ok) {
-        throw new Error('Failed to fetch questions');
+    const loadQuestionsFromLocalStorage = () => {
+      const storedData = localStorage.getItem('user-plans');
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          
+          // Access the nested questions array
+          const questions = parsedData[index]?.questions || [];
+          console.log(questions)
+          
+          if (questions.length > 0) {
+            setQuestions(questions);
+          } else {
+            console.error("No questions found in the 'user-plans'.");
+          }
+        } catch (error) {
+          console.error("Error parsing 'user-plans' from localStorage:", error);
+        }
+      } else {
+        console.error("'user-plans' not found in localStorage.");
       }
-      const data = await response.json();
-      setQuestions(data.questions);
     };
-
-    fetchQuestions();
+  
+    loadQuestionsFromLocalStorage();
   }, []);
+  
 
   const handleOptionClick = (option: string) => {
     if (selectedOption !== null) return; // Prevent multiple selections
