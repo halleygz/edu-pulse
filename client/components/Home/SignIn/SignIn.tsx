@@ -59,7 +59,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
         </button>
         </form>
         
-        <button className="flex items-center justify-center w-full py-1.5 mb-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 text-xs sm:text-sm">
+{/*         <button className="flex items-center justify-center w-full py-1.5 mb-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 text-xs sm:text-sm">
           <FaFacebook className="mr-1.5" />
           Continue with Facebook
         </button>
@@ -72,7 +72,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
         <button className="flex items-center justify-center w-full py-1.5 mb-3 text-black bg-white border rounded-lg hover:bg-gray-100 text-xs sm:text-sm">
           <FaGoogle className="mr-1.5" />
           Continue with Google
-        </button>
+        </button> */}
         
         <p className="text-center text-xs sm:text-sm">
           Need an account? <a href="#" onClick={onSwitch} className="text-custom-green hover:underline">Sign up</a>
