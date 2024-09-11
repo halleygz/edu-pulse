@@ -19,6 +19,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
   const handleLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     await login(email, password);
+    onClose()
   };
 
   return (

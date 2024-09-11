@@ -125,7 +125,7 @@ const Topics: React.FC = () => {
   const handleCloseModal = () => setError(null);
 
   return (
-    <div className="p-4 sm:p-8">
+    <div className="">
       {/* Background Image and Text Overlay */}
       <div
         className="relative w-full bg-cover bg-center h-[320px] sm:h-[640px]"
@@ -145,7 +145,7 @@ const Topics: React.FC = () => {
       </div>
 
       {/* Chapter Navigation */}
-      <div className="mt-8">
+      <div className="mt-8 p-4 sm:p-8">
         <h2 className="text-2xl font-bold mb-4">Chapter Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {subjectData.chapters.map((chapter, index) => (
