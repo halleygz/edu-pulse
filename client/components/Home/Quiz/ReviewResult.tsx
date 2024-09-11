@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation"; // Import useRouter
@@ -34,22 +33,35 @@ const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [recommendation, setRecommendation] = useState<any>(null);
   const [showFullContent, setShowFullContent] = useState(false); // State to control content view
-
+  
+  "use client";
+  const index = Number(searchParams.get("index"))
+  console.log(typeof index)
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch("/questions.json"); // Fetch questions from the public folder
-        if (!response.ok) {
-          throw new Error("Failed to fetch questions");
+    const loadQuestionsFromLocalStorage = () => {
+      const storedData = localStorage.getItem('user-plans');
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          
+          // Access the nested questions array
+          const questions = parsedData[index]?.questions || [];
+          console.log(questions)
+          
+          if (questions.length > 0) {
+            setQuestions(questions);
+          } else {
+            console.error("No questions found in the 'user-plans'.");
+          }
+        } catch (error) {
+          console.error("Error parsing 'user-plans' from localStorage:", error);
         }
-        const data = await response.json();
-        setQuestions(data.questions);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
+      } else {
+        console.error("'user-plans' not found in localStorage.");
       }
     };
-
-    fetchQuestions();
+  
+    loadQuestionsFromLocalStorage();
   }, []);
 
   useEffect(() => {
@@ -81,7 +93,7 @@ const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
 
   // Function to navigate to the Daily Study page
   const handleGetPlan = () => {
-    router.push("/daily-study"); // Navigate to the Daily Study page
+    router.push("/Plans"); // Navigate to the Daily Study page
   };
 
   return (

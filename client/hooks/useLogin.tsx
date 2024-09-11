@@ -26,6 +26,7 @@ const useLogin = ():[
         setIsLoading(true);
         setError(null);
         try {
+            
             const body = {
                 email,
                 password,
@@ -49,7 +50,7 @@ const useLogin = ():[
             localStorage.setItem('app-user', JSON.stringify(data));
             setIsAuthenticated(true)
             toast.success('Successfully logged in!');
-            router.push('/Home');
+            router.push('/Courses');
         } catch (err) {
             setError(
                 err instanceof Error

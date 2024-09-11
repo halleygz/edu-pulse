@@ -50,7 +50,7 @@ const useSignUp = (): [
       localStorage.setItem("app-user", JSON.stringify(data));
       setIsAuthenticated(true)
       toast.success("Successfully signed up!");
-      router.push("/Home");
+      router.push("/Courses");
     } catch (err) {
       setError(
         err instanceof Error
