@@ -4,6 +4,7 @@
 node_modules
 dist
 .env
+.vscode
 /.pnp
 .pnp.js
 .yarn/install-state.gz
