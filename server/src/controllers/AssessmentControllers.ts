@@ -9,6 +9,7 @@ import { AuthRequested } from "../middlewares/authToken";
 import Plan from "../models/Plans";
 import { analyzeAnswer } from "../utils/answerAnalyzer";
 import { UserResponsePlan, Answer } from "../types/allTypes";
+import generateRecommendation from "../utils/generateRec";
 
 const embeddings = new GoogleGenerativeAIEmbeddings({
   apiKey: config.api.google.key,
@@ -97,7 +98,7 @@ const evaluateAssessment = async (req: AuthRequested, res: Response) => {
 
   try {
     const answerEvalResult = analyzeAnswer(answer);
-
+    const aiPerformanceSummary = await generateRecommendation((answerEvalResult.point/10), answerEvalResult.answerEval);
     // Find the index of the plan to update
     const planIndex = user.plans.findIndex((plan) => plan._id.toString() === id);
 
@@ -130,7 +131,9 @@ const evaluateAssessment = async (req: AuthRequested, res: Response) => {
       return res.status(500).json({ message: "Failed to update user data" });
     }
 
-    res.status(200).json({ message: "Assessment evaluated and user data updated successfully", answerEvalResult });
+
+
+    res.status(200).json({ message: "Assessment evaluated and user data updated successfully", answerEvalResult, aiPerformanceSummary });
   } catch (error: unknown) {
     res.status(500).json({ message: "Internal Server Error" });
     console.log(error);

@@ -1,9 +1,16 @@
+// app/layout.tsx
+
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import ResponsiveNav from "@/components/Home/Navbar/ResponsiveNav";
 import { AuthProvider } from "@/context/AuthContext";
+import ClientWrapper from "@/components/Helper/ClientWrapper"; // Correct import path for ClientWrapper
 import axios from "axios";
+import dynamic from 'next/dynamic';
+
+const ResponsiveNav = dynamic(() => import("@/components/Home/Navbar/ResponsiveNav"), { 
+  ssr: false // Disable server-side rendering if needed
+});
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -13,29 +20,25 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "Edu-pulse",
-  description: "Getting Assesed and Learning",
+  description: "Getting Assessed and Learning",
 };
+
 axios.defaults.withCredentials = true;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    
     <html lang="en">
-      <body
-        className={`${spaceGrotesk.variable} antialiased`}
-        >
+      <body className={`${spaceGrotesk.variable} antialiased`}>
         <AuthProvider>
-          <div className="mb-2">
-        <ResponsiveNav/>
+          <div className="mb-14">
+            <ResponsiveNav />
           </div>
-          <div>
-
-        {children}
-          </div>
-    </AuthProvider>
+          <ClientWrapper>{children}</ClientWrapper> {/* Correctly use ClientWrapper */}
+        </AuthProvider>
       </body>
     </html>
   );

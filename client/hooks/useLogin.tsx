@@ -22,7 +22,7 @@ const useLogin = ():[
     const router = useRouter();
 
     const login = async (email: string, password: string) => {
-        console.log(email, password)
+        
         setIsLoading(true);
         setError(null);
         try {
