@@ -11,6 +11,7 @@ const genTokenSetCookie = (res: any, user: any) => {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
+    path: "/",
   });
 }
 
