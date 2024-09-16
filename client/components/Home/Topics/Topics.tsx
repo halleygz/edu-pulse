@@ -234,7 +234,7 @@ const Topics: React.FC = () => {
           onClick={handleTakeAssessment}
           className="bg-custom-green text-white px-6 py-3 rounded-md hover:bg-green-600"
         >
-          Take Assessment
+          Get Your Plan
         </button>
       </div>
       {/* Error Modal */}
