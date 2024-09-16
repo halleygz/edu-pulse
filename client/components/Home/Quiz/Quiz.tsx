@@ -19,7 +19,7 @@ interface Question {
   normalized_response_time?: number;
 }
 
-const Quiz: React.FC<{ onReview: () => void }> = ({ onReview }) => {
+const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onReview, questionWidth = 'w-full' }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -27,20 +27,16 @@ const Quiz: React.FC<{ onReview: () => void }> = ({ onReview }) => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [userAnswers, setUserAnswers] = useState<{ questionId: string; selectedOption: string }[]>([]);
   const router = useRouter();
-  const searchParams = useSearchParams()
-  const index = Number(searchParams.get("index"))
-  console.log(typeof index)
+  const searchParams = useSearchParams();
+  const index = Number(searchParams.get("index"));
+
   useEffect(() => {
     const loadQuestionsFromLocalStorage = () => {
       const storedData = localStorage.getItem('user-plans');
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
-          
-          // Access the nested questions array
           const questions = parsedData[index]?.questions || [];
-          console.log(questions)
-          
           if (questions.length > 0) {
             setQuestions(questions);
           } else {
@@ -53,10 +49,9 @@ const Quiz: React.FC<{ onReview: () => void }> = ({ onReview }) => {
         console.error("'user-plans' not found in localStorage.");
       }
     };
-  
+
     loadQuestionsFromLocalStorage();
-  }, []);
-  
+  }, [index]);
 
   const handleOptionClick = (option: string) => {
     if (selectedOption !== null) return; // Prevent multiple selections
@@ -139,7 +134,7 @@ const Quiz: React.FC<{ onReview: () => void }> = ({ onReview }) => {
           </div>
           <p className="text-xl font-semibold mb-4">{question.question_text}</p>
         </div>
-        <div className="flex-1 space-y-2">
+        <div className={`flex-1 space-y-2 ${questionWidth}`}>
           {Object.entries(question.answer_options).map(([key, option]) => (
             <button
               key={key}
@@ -150,7 +145,7 @@ const Quiz: React.FC<{ onReview: () => void }> = ({ onReview }) => {
                   : 'bg-white text-gray-800'
               } border-custom-green-dark hover:bg-custom-green-dark hover:text-white transition-colors duration-300`}
             >
-              {option as string}
+              {option}
             </button>
           ))}
         </div>

@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import ClientWrapper from "@/components/Helper/ClientWrapper"; // Correct import path for ClientWrapper
 import axios from "axios";
 import dynamic from 'next/dynamic';
+const ClientWrapper = dynamic(() => import('@/components/Helper/ClientWrapper'), { ssr: false });// Correct import path for ClientWrapper
 
 const ResponsiveNav = dynamic(() => import("@/components/Home/Navbar/ResponsiveNav"), { 
   ssr: false // Disable server-side rendering if needed
@@ -34,10 +34,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${spaceGrotesk.variable} antialiased`}>
         <AuthProvider>
+          
+          <ClientWrapper>
           <div className="mb-14">
             <ResponsiveNav />
           </div>
-          <ClientWrapper>{children}</ClientWrapper> {/* Correctly use ClientWrapper */}
+            {children}
+          </ClientWrapper> {/* Correctly use ClientWrapper */}
         </AuthProvider>
       </body>
     </html>

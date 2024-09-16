@@ -4,6 +4,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const ShowResult = ({ score, onClose, onReview }: { score: number; onClose: () => void; onReview: () => void; }) => {
+  // Combine onReview with onClose to close the modal when reviewing answers
+  const handleReviewClick = () => {
+    onReview();
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <motion.div 
@@ -30,7 +36,7 @@ const ShowResult = ({ score, onClose, onReview }: { score: number; onClose: () =
             Start Over
           </button>
           <button 
-            onClick={onReview} 
+            onClick={handleReviewClick} // Call the new handler function
             className="px-4 py-2 bg-custom-green-dark text-white rounded-md shadow-md hover:bg-custom-green transition-colors duration-300"
           >
             Review Answers

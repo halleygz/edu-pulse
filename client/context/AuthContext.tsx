@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setAuthUser(storedUser)
         setIsAuthenticated(true)
       }
-    }
+    } 
   },[])
 
   return (
