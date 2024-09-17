@@ -13,6 +13,7 @@ const genTokenSetCookie = (res: any, user: any) => {
     sameSite: 'none',
     path: "/",
   });
+  return token
 }
 
 export default genTokenSetCookie;
