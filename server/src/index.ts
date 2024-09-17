@@ -12,12 +12,12 @@ const app: Express = express();
 const PORT = config.server.port;
 
 app.use(cors({
-  sameSite: none,
+
   origin: ["https://3000-idx-pla-directed-1725603589203.cluster-4ezwrnmkojawstf2k7vqy36oe6.cloudworkstations.dev", "https://edu-pulse-pi.vercel.app"],
-  secure: true,
+
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+ allowedHeaders: ["Content-Type", "Set-Cookie", "Cookie"],
 }));
 app.use(express.json());
 app.use(cookieParser());
