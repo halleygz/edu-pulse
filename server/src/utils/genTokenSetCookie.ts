@@ -8,9 +8,10 @@ const genTokenSetCookie = (res: any, user: any) => {
 
   res.cookie('token', token, {
     maxAge: 1000 * 60 * 60 * 24 * 10,
-    /* httpOnly: true, */
-    /* secure: true, */
-    /* sameSite: 'none', */
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    path: "/",
   });
 }
 
