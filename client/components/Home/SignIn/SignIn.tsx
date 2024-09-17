@@ -56,7 +56,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
         <button 
           className="w-full py-1.5 mb-3 text-white bg-custom-green rounded-lg hover:bg-green-600 text-xs sm:text-sm"
         >
-          {isLoading ? "loading don't press" : "Login"}
+          {"Login"}
         </button>
         </form>
 
