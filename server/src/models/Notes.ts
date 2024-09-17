@@ -8,10 +8,10 @@ const NoteSchema = new mongoose.Schema<INoteSchema>({
     type: String,
     required: true,
   },
-    topics: {
-        type: [String],
-        required: true,
-    },
+      topics: {
+          type: [String],
+          required: true,
+      },
   content: {
     type: String,
     required: true,
