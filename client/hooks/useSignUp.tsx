@@ -41,7 +41,7 @@ const useSignUp = (): [
       }
 
       const data = response.data;
-
+      console.log(data)
       // if (!response.ok) {
       //   throw new Error(data.error || "An error occurred. Please try again.");
       // }

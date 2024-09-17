@@ -31,16 +31,20 @@ async function generateRecommendation(score: number, answerEval: any[]): Promise
 "improvement_topics": ["The Endoplasmic Reticulum", "The Golgi Apparatus"],
 "suggested_intensity_level": [0.5,0.6,0.7]
 }
+
+
 </ExampleJSONOutput>
     `;
   
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
     const result = await model.generateContent(prompt);
-    const response = result.response;
+    const response = result.response.text();
+
+    const editedResponse = response.replace("```json\n", "").replace("\n```", "").replace("\n", "")
   
     return {
       score: score,
-      generated_recommendation: response.text()
+      generated_recommendation: editedResponse
     };
   }
 

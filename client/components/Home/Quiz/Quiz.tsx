@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Import icons
-import ShowResult from './ShowResult';
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import ShowResult from "./ShowResult";
+import useAnalyseResult from "@/hooks/useAnalyseResult";
 
-interface Question {
+export interface Question {
   _id: string;
   question_text: string;
   answer_options: Record<string, string>;
@@ -17,68 +18,85 @@ interface Question {
   intensity?: number;
   expected_response_time?: number;
   normalized_response_time?: number;
+  user_response_time?: number; // Store user response time
 }
 
 const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onReview, questionWidth = 'w-full' }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [quizFinished, setQuizFinished] = useState<boolean>(false);
-  const [showResult, setShowResult] = useState<boolean>(false);
-  const [userAnswers, setUserAnswers] = useState<{ questionId: string; selectedOption: string }[]>([]);
+  const [quizFinished, setQuizFinished] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+  const [userAnswers, setUserAnswers] = useState<
+    { questionId: string; selectedOption: string }[]
+  >([]);
+  const [startTime, setStartTime] = useState<number>(0);
+  
+  const [{isLoading, error}, analyseResult] = useAnalyseResult()
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const index = Number(searchParams.get("index"));
 
+  // Load questions from localStorage once
   useEffect(() => {
-    const loadQuestionsFromLocalStorage = () => {
-      const storedData = localStorage.getItem('user-plans');
-      if (storedData) {
-        try {
-          const parsedData = JSON.parse(storedData);
-          const questions = parsedData[index]?.questions || [];
-          if (questions.length > 0) {
-            setQuestions(questions);
-          } else {
-            console.error("No questions found in the 'user-plans'.");
-          }
-        } catch (error) {
-          console.error("Error parsing 'user-plans' from localStorage:", error);
+    const storedData = localStorage.getItem("user-plans");
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        const questions = parsedData[index]?.questions || [];
+        if (questions.length > 0) {
+          setQuestions(questions);
+          setStartTime(Date.now()); // Initialize timer for the first question
+        } else {
+          console.error("No questions found in 'user-plans'.");
         }
-      } else {
-        console.error("'user-plans' not found in localStorage.");
+      } catch (error) {
+        console.error("Error parsing 'user-plans':", error);
       }
-    };
-
-    loadQuestionsFromLocalStorage();
+    } else {
+      console.error("'user-plans' not found in localStorage.");
+    }
   }, [index]);
 
   const handleOptionClick = (option: string) => {
-    if (selectedOption !== null) return; // Prevent multiple selections
-    setSelectedOption(option);
+    if (selectedOption === null) setSelectedOption(option);
   };
 
-  const handleNextQuestion = () => {
-    if (selectedOption === null) return; // Require selection before moving on
+  const handleNextQuestion = useCallback(() => {
+    if (selectedOption === null) return;
 
+    const responseTime = Math.round((Date.now() - startTime) / 1000);
+
+    // Update the current question with the user's response time
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestion].user_response_time = responseTime;
+    setQuestions(updatedQuestions);
+
+    // Store selected answer
     setUserAnswers((prevAnswers) => [
       ...prevAnswers,
       { questionId: questions[currentQuestion]._id, selectedOption },
     ]);
 
+    // Move to the next question or finish the quiz
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setSelectedOption(null);
+      setStartTime(Date.now()); // Reset timer for the new question
     } else {
       setQuizFinished(true);
+      console.log(questions)
       setShowResult(true);
     }
-  };
+  }, [selectedOption, startTime, questions, currentQuestion]);
 
   const handlePreviousQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1);
-      setSelectedOption(userAnswers[currentQuestion - 1]?.selectedOption || null);
+      setSelectedOption(
+        userAnswers[currentQuestion - 1]?.selectedOption || null
+      );
     }
   };
 
@@ -91,25 +109,38 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
   };
 
   const handleReviewResult = () => {
+    const storedData = localStorage.getItem("user-plans");
+    if (!storedData) return;
+    const parsedData = JSON.parse(storedData);
+    const planId = parsedData[index]?._id || "";
     const userAnswersQuery = encodeURIComponent(JSON.stringify(userAnswers));
+    analyseResult(questions, planId)
     router.push(`/review-result?answers=${userAnswersQuery}`);
     onReview();
   };
 
+  const calculateScore = () => {
+    return userAnswers.filter(
+      (ans) =>
+        ans.selectedOption ===
+        questions.find((q) => q._id === ans.questionId)?.correct_option
+    ).length;
+  };
+
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown') {
+      if (e.key === "ArrowDown") {
         handleNextQuestion();
-      } else if (e.key === 'ArrowUp') {
+      } else if (e.key === "ArrowUp") {
         handlePreviousQuestion();
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [currentQuestion, selectedOption]);
+  }, [handleNextQuestion, currentQuestion, selectedOption]);
 
   if (questions.length === 0) {
     return <p>Loading questions...</p>;
@@ -119,16 +150,13 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
   const questionNumber = currentQuestion + 1;
   const totalQuestions = questions.length;
 
-  const calculateScore = () => {
-    return userAnswers.filter(ans => ans.selectedOption === questions.find(q => q._id === ans.questionId)?.correct_option).length;
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-900 p-4">
-      <h1 className="text-3xl font-bold mb-6 text-custom-green-dark">Biology Assessment</h1>
+      <h1 className="text-3xl font-bold mb-6 text-custom-green-dark">
+        Biology Assessment
+      </h1>
       <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-xl flex flex-col md:flex-row">
         <div className="flex-1 mb-6 md:mb-0">
-          {/* Display current question number and total questions */}
           <div className="mb-4 text-lg text-gray-700">
             Question {questionNumber} of {totalQuestions}
           </div>
@@ -141,8 +169,8 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
               onClick={() => handleOptionClick(key)}
               className={`w-full px-4 py-2 text-left border rounded-md ${
                 selectedOption === key
-                  ? 'bg-custom-green-dark text-white'
-                  : 'bg-white text-gray-800'
+                  ? "bg-custom-green-dark text-white"
+                  : "bg-white text-gray-800"
               } border-custom-green-dark hover:bg-custom-green-dark hover:text-white transition-colors duration-300`}
             >
               {option}
