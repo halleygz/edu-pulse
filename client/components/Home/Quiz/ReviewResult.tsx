@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation"; // Import useRouter
@@ -25,6 +26,8 @@ interface ReviewResultProps {
   onClose: () => void;
 }
 
+
+
 const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
   const searchParams = useSearchParams();
   const router = useRouter(); // Initialize useRouter
@@ -34,7 +37,6 @@ const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
   const [recommendation, setRecommendation] = useState<any>(null);
   const [showFullContent, setShowFullContent] = useState(false); // State to control content view
   
-  "use client";
   const index = Number(searchParams.get("index"))
   console.log(typeof index)
   useEffect(() => {

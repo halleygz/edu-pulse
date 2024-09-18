@@ -31,14 +31,6 @@ const Home = () => {
       <Hero />
       <About />
       <Review />
-      {/* <KnowledgeTest />
-      <Courses />
-      <PremiumCourses />
-      <Topics />
-      <Quiz onReview={handleReviewClick} />
-      {showReview && <ReviewResult onClose={handleCloseReview} />}
-      <DailyStudy/>
-      <ProfilePage/> */}
       <Footer />
     </div>
   );

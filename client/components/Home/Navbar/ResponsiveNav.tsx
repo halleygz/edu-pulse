@@ -36,7 +36,7 @@
     return (
       <>
         <Nav openNav={showNavHandler} openSignIn={openSignInHandler} />
-        <MobileNav showNav={showNav} closeNav={hideNavHandler} />
+        <MobileNav showNav={showNav} closeNav={hideNavHandler} openSignIn={openSignInHandler}/>
         {showSignIn && <SignIn onSwitch={switchToSignUpHandler} onClose={closeSignInHandler} />}
         {showSignUp && <SignUp onSwitch={switchToSignInHandler} onClose={closeSignUpHandler} />}
       </>

@@ -1,7 +1,13 @@
-"use client"; // Add this line to mark this file as a Client Component
+"use client"; // This line marks the file as a Client Component
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import ReviewResult from '../../components/Home/Quiz/ReviewResult';
+
+const FallBack: React.FC = () => {
+  return (
+    <>working/not</>
+  )
+}
 
 const ReviewResultPage: React.FC = () => {
     const [showReviewResult, setShowReviewResult] = useState(true);
@@ -11,9 +17,9 @@ const ReviewResultPage: React.FC = () => {
     };
 
     return (
-        <>
+        <Suspense fallback={<FallBack />}>
             {showReviewResult && <ReviewResult onClose={handleClose} />}
-        </>
+        </Suspense>
     );
 };
 

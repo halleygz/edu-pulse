@@ -19,8 +19,8 @@ const signUp = async (req: Request, res: Response) => {
 
     if (user) {
       //gen cookie here
-      genTokenSetCookie(res, user);
-      res.status(201).json({ user });
+      const token = genTokenSetCookie(res, user);
+      res.status(201).json({ user, token });
     } else {
       res.status(400).json({ error: "couldn't create user:" });
     }
@@ -32,7 +32,7 @@ const signUp = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   const { email, password }: loginTypes = req.body;
-  console.log(email, password)
+  
  
   try {
     const user = await User.findOne({ email });
@@ -40,7 +40,7 @@ const login = async (req: Request, res: Response) => {
       const passCheck = await bcrypt.compare(password, user.password);
       if (passCheck) {
         // Ensure genTokenSetCookie does not send a response
-        genTokenSetCookie(res, user);
+        const token = genTokenSetCookie(res, user);
         if (!res.headersSent) {
         res.status(200).json({
           message: "login successful",
@@ -48,6 +48,7 @@ const login = async (req: Request, res: Response) => {
             full_name: user.full_name,
             email: user.email,
             username: user.username,
+            token
           });
       } 
     } else {
