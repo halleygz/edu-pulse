@@ -46,4 +46,4 @@ export const analyzeAnswer = (answers: Answer[]): AnalysisResult => {
     avg_intensity: intensity/answers.length,
     answered_Questions: answeredQuestions
   };
-};
+}; 

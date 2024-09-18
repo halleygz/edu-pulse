@@ -17,7 +17,7 @@ const useLogout = ():[() => Promise<void>] => {
         setIsAuthenticated(false);
         toast.success('Successfully logged out!');
         router.push('/');
-    }
+    } 
 
     return [logout];
 }
