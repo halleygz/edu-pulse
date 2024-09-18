@@ -18,9 +18,9 @@ const authenticateToken = async (
   let token: string | undefined;
 
   // Check for token in Authorization header
-  const authHeader = req.headers['authorization'];
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    token = authHeader.split(' ')[1];
+  const authHeader = req.body.token;
+  if (authHeader && authHeader) {
+    token = authHeader;
   }
 
   // If not in header, check in cookies

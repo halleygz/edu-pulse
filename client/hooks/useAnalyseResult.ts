@@ -2,7 +2,7 @@ import {useState} from 'react'
 import{useRouter} from 'next/navigation'
 import {axiosInstance} from '@/config/axiosInstnace'
 import {Question} from '@/components/Home/Quiz/Quiz'
-
+import Cookies from 'js-cookie';
 
 interface handleLoad {
     isLoading:boolean;
@@ -20,9 +20,11 @@ const useAnalyseResult = (): [
         setIsLoading(true)
         setError(null)
         try {//sends the questions array as user responses
+            const token = Cookies.get('token');
             const body = {
                 user_responses: question,
-                _id: id
+                _id: id,
+                token: token
             }
             console.log("analyzing...")
             const response = await axiosInstance.post(`/api/assessment/analyze/${id}`, body)
