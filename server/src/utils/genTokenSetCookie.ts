@@ -11,6 +11,7 @@ const genTokenSetCookie = (res: any, user: any) => {
     httpOnly: true,
     secure: config.env === 'production',
     sameSite: config.env === 'production' ? 'none' : 'lax',
+
     path: "/",
   });
   return token;
