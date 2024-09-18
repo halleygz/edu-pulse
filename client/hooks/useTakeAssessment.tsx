@@ -1,6 +1,4 @@
-import axios from 'axios'
 import { useState } from 'react'
-import {config} from '@/config/config'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { axiosInstance } from '@/config/axiosInstnace'

@@ -15,7 +15,6 @@ const useLogin = ():[
     UseAuthResult,
     (email: string, password: string) => Promise<void>
 ] => {
-    const {setAuthUser,setIsAuthenticated} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     
@@ -41,14 +40,12 @@ const useLogin = ():[
             }
 
             const data = response.data;
-            console.log(data)
+            sessionStorage.setItem('app-user', data.token)
             // if (!response.ok) {
             //     throw new Error(data.error || 'An error occurred. Please try again.');
             // }
 
-            setAuthUser(data.userId);
             localStorage.setItem('app-user', JSON.stringify(data));
-            setIsAuthenticated(true)
             toast.success('Successfully logged in!');
             router.push('/Courses');
         } catch (err) {
