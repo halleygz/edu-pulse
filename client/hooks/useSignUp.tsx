@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
@@ -32,7 +31,7 @@ const useSignUp = (): [
         email,
         password
       }
-      const response = await axios.post(`${config.apiUrl}/api/auth/signup`, body, {
+      const response = await axios.post(`api/auth/signup`, body, {
         withCredentials: true,
       });
 
