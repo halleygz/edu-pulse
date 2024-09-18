@@ -27,7 +27,7 @@ const useTakeAssesment = (): [
                 topics: arrayToBeSent,
                 token: token
             }
-            console.log("requesting....")
+            console.log(token)
 
             const response = await axiosInstance.post(`/api/assessment/create`, body);
 
