@@ -14,7 +14,6 @@ const useSignUp = (): [
   UseAuthResult,
   (full_name: string, phone_number:string, username:string,email: string, password: string) => Promise<void>
 ] => {
-  const { setAuthUser, setIsAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
