@@ -33,13 +33,13 @@ const useSignUp = (): [
         password
       }
       const response = await axios.post(`${config.apiUrl}/api/auth/signup`, body, {
-        withCredentials: true,
+        withCredentials: true,// ensures that cookies are sent
       });
 
       if (!response) {
         throw new Error("An error occurred. Please try again.");
       }
-
+      // If the request is successful, the response data is stored in data
       const data = response.data;
       // if (!response.ok) {
       //   throw new Error(data.error || "An error occurred. Please try again.");

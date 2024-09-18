@@ -21,7 +21,7 @@ const authenticatToken = async (
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  try {
+  try {//ensures that the token is valid and was signed with the application's secret.
     const decoded = jwt.verify(token, config.jwt.secret) as { id: string };
     const user = await User.findById(decoded.id).select("-password");
 

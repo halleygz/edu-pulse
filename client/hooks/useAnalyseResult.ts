@@ -15,11 +15,11 @@ const useAnalyseResult = (): [
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null);
     const router = useRouter()
-
+    //hook for handling the logic of sending quiz responses for analysis    
     const analyseResult = async(question: Question[], id:string) => {
         setIsLoading(true)
         setError(null)
-        try {
+        try {//sends the questions array as user responses
             const body = {
                 user_responses: question
             }

@@ -134,7 +134,7 @@ const SinglePlan = () => {
         </div>
       )}
     </div>
-  ); 
+  );
 };
 
 export default SinglePlan;
