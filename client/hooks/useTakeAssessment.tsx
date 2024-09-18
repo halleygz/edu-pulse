@@ -14,9 +14,9 @@ const useTakeAssesment = (): [
 ] => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
+    //navigation from next
     const router = useRouter();
-
+    //responsible for starting the assesment
     const takeAssesment = async (topic: string) => {
         setIsLoading(true);
         setError(null);
@@ -31,7 +31,7 @@ const useTakeAssesment = (): [
             if (!response) {
                 throw new Error('An error occurred. Please try again.');
             }
-
+            //retrieves the data(assesment plans) from the api response
             const data = response.data;
 
             localStorage.setItem("user-plans", JSON.stringify(data.allUserPlans.plans));

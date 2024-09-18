@@ -3,7 +3,6 @@ import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import {cookies} from 'next/headers'
 
 interface UseAuthResult {
   isLoading: boolean;
@@ -31,23 +30,24 @@ const useSignUp = (): [
         email,
         password
       }
+
       const response = await axios.post(`api/auth/signup`, body, {
         withCredentials: true,
+
       });
 
       if (!response) {
         throw new Error("An error occurred. Please try again.");
       }
-
+      // If the request is successful, the response data is stored in data
       const data = response.data;
       sessionStorage.setItem('app-user', data.token)
-      const cookieStore = cookies()
       // if (!response.ok) {
       //   throw new Error(data.error || "An error occurred. Please try again.");
       // }
 
       localStorage.setItem("app-user", JSON.stringify(data));
-      cookieStore.set("token", data.token)
+      
       console.log("signup success")
       toast.success("Successfully signed up!");
       router.push("/Courses");
