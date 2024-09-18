@@ -88,14 +88,7 @@ const evaluateAssessment = async (req: AuthRequested, res: Response) => {
     return res.status(401).json({ message: "User not authenticated" });
   }
 
-  const filteredPlans = user_responses.filter((user_response: UserResponsePlan) => user_response._id === id);
-  const selectedPlan = filteredPlans.length > 0 ? filteredPlans[0] : undefined;
-    
-  if (!selectedPlan) {
-    return res.status(404).json({ message: "Selected plan not found" });
-  }
-
-  const answer = selectedPlan.questions as Answer[];
+  const answer = user_responses as Answer[];
 
   try {
     const answerEvalResult = analyzeAnswer(answer);

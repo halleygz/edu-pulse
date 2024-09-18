@@ -40,7 +40,7 @@ async function generateRecommendation(score: number, answerEval: any[]): Promise
     const result = await model.generateContent(prompt);
     const response = result.response.text();
 
-    const editedResponse = response.replace("```json\n", "").replace("\n```", "").replace("\n", "")
+    const editedResponse = response.replace("```json\n", "").replace("\n```", "").replace("\n", "").replace(/\\/g, '')
   
     return {
       score: score,
