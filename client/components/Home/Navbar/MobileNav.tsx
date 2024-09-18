@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { navLinks } from '@/constant/constant';
+import { navLinks1, navLinks2 } from '@/constant/constant';
+import { getDataFromLocalStorage } from '@/constant/constant';
 import { CgClose } from 'react-icons/cg';
 import SearchBar from '@/components/Helper/SearchBar'; // Import SearchBar
 import Profile from '@/components/Helper/Profile'; // Import Profile
@@ -10,9 +11,10 @@ import Profile from '@/components/Helper/Profile'; // Import Profile
 type Props = {
     showNav: boolean;
     closeNav: () => void;
+    openSignIn: () => void;
 };
 
-const MobileNav = ({ closeNav, showNav }: Props) => {
+const MobileNav = ({ closeNav, showNav, openSignIn }: Props) => {
     const navOpen = showNav ? 'translate-x-0' : 'translate-x-[-100%]';
     return (
         <div>
@@ -27,17 +29,35 @@ const MobileNav = ({ closeNav, showNav }: Props) => {
                     <h2 className='text-2xl font-extrabold text-center mt-12 mb-8'>EduPlus</h2>
                     {/* SearchBar and Profile */}
 
-                    <div className='flex flex-col items-center space-y-4'>
-                        <SearchBar />
-                        <Profile />
-                    </div>
+                    
                     {/* Navlinks */}
                     <div className='flex flex-col items-center mt-6'>
-                        {navLinks.map((link) => (
-                            <Link key={link.id} href={link.url}>
-                                <p className='nav__link text-lg ml-8 border-b-[1.5px] pb-2 border-white'>{link.label}</p>
-                            </Link>
-                        ))}
+                    {getDataFromLocalStorage() ? (
+            <>
+              {navLinks1.map((link) => (
+                <Link key={link.id} href={link.url}>
+                  <p className="nav__link text-white">{link.label}</p>
+                </Link>
+              ))}
+
+              <Profile />
+            </>
+          ) : (
+            <>
+              {navLinks2.map((link) => (
+                <Link key={link.id} href={link.url}>
+                  <p className="nav__link text-white">{link.label}</p>
+                </Link>
+              ))}
+
+              <button
+                onClick={openSignIn}
+                className="px-4 py-1 text-white font-semibold text-sm bg-green-500 hover:bg-green-600 transition-all rounded-lg md:px-8 md:py-2 md:text-base md:font-semibold"
+              >
+                Get Started
+              </button>
+            </>
+          )}
                     </div>
                 </div>
             </div>
