@@ -26,7 +26,7 @@ const useTakeAssesment = (): [
                 topics: arrayToBeSent
             }
             console.log("requesting....")
-            const response = await axiosInstance.post(`api/assessment/create`, body);
+            const response = await axiosInstance.post(`/api/assessment/create`, body);
 
             if (!response) {
                 throw new Error('An error occurred. Please try again.');
