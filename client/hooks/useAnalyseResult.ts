@@ -26,6 +26,7 @@ const useAnalyseResult = (): [
             }
             console.log("analyzing...")
             const response = await axiosInstance.post(`/api/assessment/analyze/${id}`, body)
+
             if(!response) {
                 throw new Error('An error occurred. Please try again.')
             }
