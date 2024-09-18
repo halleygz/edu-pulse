@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { axiosInstance } from '@/config/axiosInstnace'
-
+import Cookies from 'js-cookie';
 interface useTakeAssesmentResult {
     isLoading: boolean;
     error: string | null;
@@ -22,10 +22,13 @@ const useTakeAssesment = (): [
         setError(null);
         const arrayToBeSent = [topic]
         try {
+            const token = Cookies.get('token');
             const body = {
-                topics: arrayToBeSent
+                topics: arrayToBeSent,
+                token: token
             }
             console.log("requesting....")
+
             const response = await axiosInstance.post(`/api/assessment/create`, body);
 
             if (!response) {
