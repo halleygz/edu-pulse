@@ -12,6 +12,8 @@ const JWT_SECRET: string = `${process.env.JWT_SECRET}`;
 
 const GOOGLE_API_KEY = `${process.env.GOOGLE_API_KEY}`;
 
+const ENV = `${process.env.ENV}`;
+
 export const config = {
   mongodb: {
     url: MONGO_URI,
@@ -23,6 +25,7 @@ export const config = {
   jwt: {
     secret: JWT_SECRET,
   },
+  env: ENV,
   api: {
     google: {
       key: GOOGLE_API_KEY,

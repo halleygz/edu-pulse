@@ -41,14 +41,11 @@ const useSignUp = (): [
       }
 
       const data = response.data;
-      console.log(data)
       // if (!response.ok) {
       //   throw new Error(data.error || "An error occurred. Please try again.");
       // }
 
-      setAuthUser(data.userId);
       localStorage.setItem("app-user", JSON.stringify(data));
-      setIsAuthenticated(true)
       toast.success("Successfully signed up!");
       router.push("/Courses");
     } catch (err) {
