@@ -20,16 +20,19 @@ export interface Question {
   normalized_response_time?: number;
   user_response_time?: number; // Store user response time
   selected_option?: string; // Store user's selected option
+
 }
 
 const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onReview, questionWidth = 'w-full' }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+
   const [selected_option, setSelected_option] = useState<string | null>(null);
   const [quizFinished, setQuizFinished] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [userAnswers, setUserAnswers] = useState<
     { questionId: string; selected_option: string }[]
+
   >([]);
   const [startTime, setStartTime] = useState<number>(0);
   
@@ -61,6 +64,7 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
   }, [index]);
 
   const handleOptionClick = (option: string) => {
+
     if (selected_option === null) setSelected_option(option);
   };
 
@@ -73,6 +77,7 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestion].user_response_time = responseTime;
     updatedQuestions[currentQuestion].selected_option = selected_option;
+
     setQuestions(updatedQuestions);
 
     // Store selected answer
@@ -84,7 +89,9 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
     // Move to the next question or finish the quiz
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
+
       setSelected_option(null);
+
       setStartTime(Date.now()); // Reset timer for the new question
     } else {
       setQuizFinished(true);
@@ -93,11 +100,14 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
     }
   }, [selected_option, startTime, questions, currentQuestion]);
 
+
   const handlePreviousQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1);
+
       setSelected_option(
         userAnswers[currentQuestion - 1]?.selected_option || null
+
       );
     }
   };
@@ -115,17 +125,21 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
     if (!storedData) return;
     const parsedData = JSON.parse(storedData);
     const planId = parsedData[index]?._id || "";
+
     const userAnswersQuery = encodeURIComponent(JSON.stringify(questions));
     analyseResult(questions, planId)
     console.log(questions)
     router.push(`/review-result?answers=${userAnswersQuery}?id=${planId}`);
+
     onReview();
   };
 
   const calculateScore = () => {
     return userAnswers.filter(
       (ans) =>
+
         ans.selected_option ===
+
         questions.find((q) => q._id === ans.questionId)?.correct_option
     ).length;
   };
@@ -143,7 +157,9 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
+
   }, [handleNextQuestion, currentQuestion, selected_option]);
+
 
   if (questions.length === 0) {
     return <p>Loading questions...</p>;
@@ -171,7 +187,9 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
               key={key}
               onClick={() => handleOptionClick(key)}
               className={`w-full px-4 py-2 text-left border rounded-md ${
+
                 selected_option === key
+
                   ? "bg-custom-green-dark text-white"
                   : "bg-white text-gray-800"
               } border-custom-green-dark hover:bg-custom-green-dark hover:text-white transition-colors duration-300`}

@@ -3,8 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { HiBars3BottomRight } from "react-icons/hi2";
+
 import axios from "axios";
 import { useRouter } from "next/navigation"; // Import useRouter
+
 // import SearchBar from '@/components/Helper/SearchBar'; // Import SearchBar
 // import Profile from '@/components/Helper/Profile'; // Import Profile
 import {
@@ -14,6 +16,7 @@ import {
 } from "@/constant/constant";
 import Profile from "@/components/Helper/Profile";
 import { axiosInstance } from "@/config/axiosInstnace";
+
 
 type Props = {
   openNav: () => void;
@@ -46,9 +49,11 @@ const Nav = ({ openNav, openSignIn }: Props) => {
                   <p className="nav__link text-white">{link.label}</p>
                 </Link>
               ))}
+
               <button onClick={handleLogout}>logout</button>
   <Profile />
               {/* router.push("/Profile"); // Navigate to the Daily Study page */}
+
             </>
           ) : (
             <>

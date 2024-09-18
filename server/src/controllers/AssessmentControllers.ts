@@ -88,7 +88,9 @@ const evaluateAssessment = async (req: AuthRequested, res: Response) => {
     return res.status(401).json({ message: "User not authenticated" });
   }
 
+
   const answer = user_responses as Answer[];
+
 
   try {
     const answerEvalResult = analyzeAnswer(answer);
