@@ -1,22 +1,26 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-    const authCookie = request.cookies.getAll(); // Get cookie from request
-    console.log('Auth Cookie:', authCookie);
+    const authCookie = request.cookies.get("token"); // Get cookie from request
 
-    const token = authCookie ? authCookie : 'notoken';
+    const token = authCookie ? authCookie.value : '';
     console.log('Token in middleware:', token);
 
     const response = NextResponse.next();
 
-    // If you need to modify the response, like setting a cookie
-    if (authCookie) {
-        // response.cookies.set("app-user", authCookie, { httpOnly: true });
+    try {
+        if(token) {
+            return response;
+        } else {
+            return NextResponse.redirect(new URL ('/', request.url));
+        }
+    } catch (err) {
+        console.error(err);
+        return NextResponse.redirect(new URL ('/', request.url));
     }
 
-    return response;
 }
 
 export const config = {
-    matcher: ["/Courses", "/Courses/:path*"]
+    matcher: ["/Courses", "/Courses/:path*", "/Plans", "/Plans/:path*", "/Profile", "/Profile/:path*"]
 }
