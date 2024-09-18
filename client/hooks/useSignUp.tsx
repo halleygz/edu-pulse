@@ -4,6 +4,7 @@ import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import {cookies} from 'next/headers'
 
 interface UseAuthResult {
   isLoading: boolean;
@@ -41,11 +42,13 @@ const useSignUp = (): [
 
       const data = response.data;
       sessionStorage.setItem('app-user', data.token)
+      const cookieStore = cookies()
       // if (!response.ok) {
       //   throw new Error(data.error || "An error occurred. Please try again.");
       // }
 
       localStorage.setItem("app-user", JSON.stringify(data));
+      cookieStore.set("token", data.token)
       console.log("signup success")
       toast.success("Successfully signed up!");
       router.push("/Courses");
