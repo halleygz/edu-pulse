@@ -40,7 +40,7 @@ export default function RootLayout({
             <ResponsiveNav />
           </div>
             {children}
-          </ClientWrapper> {/* Correctly use ClientWrapper */}
+          </ClientWrapper> 
         </AuthProvider>
       </body>
     </html>

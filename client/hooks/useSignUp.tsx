@@ -30,14 +30,16 @@ const useSignUp = (): [
         email,
         password
       }
+
       const response = await axios.post(`api/auth/signup`, body, {
         withCredentials: true,
+
       });
 
       if (!response) {
         throw new Error("An error occurred. Please try again.");
       }
-
+      // If the request is successful, the response data is stored in data
       const data = response.data;
       sessionStorage.setItem('app-user', data.token)
       // if (!response.ok) {
