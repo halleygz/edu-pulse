@@ -41,11 +41,13 @@ const useSignUp = (): [
       }
 
       const data = response.data;
+      sessionStorage.setItem('app-user', data.token)
       // if (!response.ok) {
       //   throw new Error(data.error || "An error occurred. Please try again.");
       // }
 
       localStorage.setItem("app-user", JSON.stringify(data));
+      console.log("signup success")
       toast.success("Successfully signed up!");
       router.push("/Courses");
     } catch (err) {
