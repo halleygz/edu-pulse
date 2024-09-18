@@ -59,7 +59,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose, onSwitch }) => {
           {"Login"}
         </button>
         </form>
-        
+
         
         <p className="text-center text-xs sm:text-sm">
           Need an account? <a href="#" onClick={onSwitch} className="text-custom-green hover:underline">Sign up</a>
