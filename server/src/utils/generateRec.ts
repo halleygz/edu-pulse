@@ -5,6 +5,7 @@ const genAI = new GoogleGenerativeAI(config.api.google.key);
 
 
 async function generateRecommendation(score: number, answerEval: any[]): Promise<any> {
+    //This creates a prompt that will be sent to the AI model
     const prompt = `
     <Instructions>
     - Use the provided JSON data in the Question as your only source of information to create a performance summary.
@@ -35,11 +36,11 @@ async function generateRecommendation(score: number, answerEval: any[]): Promise
 
 </ExampleJSONOutput>
     `;
-  
+    //selects ai model
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
     const result = await model.generateContent(prompt);
     const response = result.response.text();
-
+  
     const editedResponse = response.replace("```json\n", "").replace("\n```", "").replace("\n", "")
   
     return {

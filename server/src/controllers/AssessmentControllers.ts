@@ -82,19 +82,20 @@ const createAssessment = async (req: AuthRequested, res: Response) => {
 const evaluateAssessment = async (req: AuthRequested, res: Response) => {
   const { id } = req.params;
   const user = req.user;
-  const { user_responses } = req.body as { user_responses: UserResponsePlan[] };
+  //contains responses for the assessment
+  const { user_responses } = req.body as { user_responses: UserResponsePlan[] };//
 
   if (!user) {
     return res.status(401).json({ message: "User not authenticated" });
   }
-
+  //filters the user response to find the plan that match the id
   const filteredPlans = user_responses.filter((user_response: UserResponsePlan) => user_response._id === id);
   const selectedPlan = filteredPlans.length > 0 ? filteredPlans[0] : undefined;
     
   if (!selectedPlan) {
     return res.status(404).json({ message: "Selected plan not found" });
   }
-
+  //extracts the questions
   const answer = selectedPlan.questions as Answer[];
 
   try {
