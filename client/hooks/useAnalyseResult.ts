@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import{useRouter} from 'next/navigation'
 import {axiosInstance} from '@/config/axiosInstnace'
 import {Question} from '@/components/Home/Quiz/Quiz'
@@ -14,13 +14,31 @@ const useAnalyseResult = (): [
 ] => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter()
+    const [token, setToken] = useState<string | null>(null)
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("app-user");
+        if (storedToken) {
+          try {
+            const parsedData = JSON.parse(storedToken);
+            const getToken = parsedData?.token || null;
+            if (getToken) {
+              setToken(getToken);
+            } else {
+              console.error("couldn't get token.");
+            }
+          } catch (error) {
+            console.error("Error parsing data:", error);
+          }
+        } else {
+          console.error("no token found");
+        }
+      }, []);
     //hook for handling the logic of sending quiz responses for analysis    
     const analyseResult = async(question: Question[], id:string) => {
         setIsLoading(true)
         setError(null)
         try {//sends the questions array as user responses
-            const token = Cookies.get('token');
             const body = {
                 user_responses: question,
                 _id: id,

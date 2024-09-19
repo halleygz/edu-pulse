@@ -19,14 +19,15 @@ const authenticateToken = async (
 
   // Check for token in Authorization header
   const authHeader = req.body.token;
+  console.log(authHeader)
   if (authHeader && authHeader) {
     token = authHeader;
   }
 
   // If not in header, check in cookies
-  if (!token) {
-    token = req.cookies.token;
-  }
+  // if (!token) {
+  //   token = req.cookies.token;
+  // }
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
