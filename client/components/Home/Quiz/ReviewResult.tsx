@@ -74,8 +74,10 @@ useEffect(() => {
     const answersParam = searchParams.get("answers");
     if (answersParam) {
       try {
+
         const parsedAnswers = JSON.parse(decodeURIComponent(answersParam));
         console.log(parsedAnswers)
+
         setUserAnswers(parsedAnswers);
       } catch (error) {
         console.error("Error parsing user answers:", error);
@@ -83,7 +85,11 @@ useEffect(() => {
     }
   }, [searchParams]);
 
-const fetchRecommendation = async () => {
+
+  const fetchRecommendation = async () => {
+    const planIdParam = searchParams.get("id");
+    console.log(planIdParam)
+
     try {
       const response = await fetch("/Ai.json"); // Corrected path to Ai.json
       if (!response.ok) {
