@@ -129,7 +129,7 @@ const Quiz: React.FC<{ onReview: () => void, questionWidth?: string }> = ({ onRe
     const userAnswersQuery = encodeURIComponent(JSON.stringify(userAnswers));
     analyseResult(questions, planId)
     console.log(questions)
-    router.push(`/review-result?answers=${userAnswersQuery}`);
+    router.push(`/review-result?answers=${userAnswersQuery}&index=${index}`);
 
     onReview();
   };
