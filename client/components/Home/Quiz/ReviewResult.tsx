@@ -1,5 +1,4 @@
-"use client";
-
+"use-client"
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation"; // Import useRouter
 import useAnalyseResult from "@/hooks/useAnalyseResult";
@@ -28,7 +27,10 @@ interface ReviewResultProps {
   onClose: () => void;
 }
 
-
+const cleanJSONString = (jsonString: string): string => {
+  // Remove unwanted characters (e.g., backslashes, newlines, etc.)
+  return jsonString.replace(/\\n|\\r|\\t|\\/g, '');
+};
 
 const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
   const searchParams = useSearchParams();
@@ -73,7 +75,8 @@ const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
     const planIdParam = searchParams.get("id");
     if (answersParam) {
       try {
-        const parsedAnswers = JSON.parse(decodeURIComponent(answersParam));
+        const cleanedAnswers = cleanJSONString(decodeURIComponent(answersParam));
+        const parsedAnswers = JSON.parse(cleanedAnswers);
         setUserAnswers(parsedAnswers);
         setPlanId(planIdParam);
       } catch (error) {
@@ -81,6 +84,7 @@ const ReviewResult: React.FC<ReviewResultProps> = ({ onClose }) => {
       }
     }
   }, [searchParams]);
+
   const fetchRecommendation = async () => {
     const planIdParam = searchParams.get("id");
     console.log(planIdParam)
